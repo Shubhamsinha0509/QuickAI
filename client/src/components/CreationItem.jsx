@@ -1,9 +1,17 @@
 import React, { useState } from 'react'
 import { Markdown } from '@react-email/components'
+import { Trash2 } from 'lucide-react'
 
-const CreationItem = ({item}) => {
+const CreationItem = ({item, onDelete}) => {
 
     const[expanded,setExpanded] = useState(false)
+
+    const handleDelete = (e) => {
+        e.stopPropagation()
+        if(window.confirm('Are you sure you want to delete this creation?')) {
+            onDelete(item.id)
+        }
+    }
 
   return (
     <div onClick={()=> setExpanded(!expanded)} className='p-4 max-w-5xl text-sm bg-white border border-gray-200 rounded-lg cursor-pointer'>
@@ -13,7 +21,18 @@ const CreationItem = ({item}) => {
                 <h2>{item.prompt}</h2>
                 <p className='text-gray-500'>{item.type} - {new Date(item.created_at).toLocaleDateString()}</p>
             </div>
-            <button className='bg-[#EFF6FF] border border-[#BFDBFE] text-[#1E40AF] px-4 py-1 rounded-full'>{item.type}</button>
+            <div className='flex items-center gap-2'>
+                <button className='bg-[#EFF6FF] border border-[#BFDBFE] text-[#1E40AF] px-4 py-1 rounded-full'>{item.type}</button>
+                {onDelete && (
+                    <button 
+                        onClick={handleDelete}
+                        className='p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors'
+                        title='Delete creation'
+                    >
+                        <Trash2 className='w-4 h-4'/>
+                    </button>
+                )}
+            </div>
 
         </div>
         {

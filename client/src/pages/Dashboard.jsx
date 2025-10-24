@@ -31,6 +31,25 @@ const Dashboard = () => {
     setLoading(false)
   }
 
+  const handleDeleteCreation = async (id) => {
+    try {
+      const { data } = await axios.post('/api/user/delete-creation', 
+        { id },
+        { headers: { Authorization: `Bearer ${await getToken()}` } }
+      )
+
+      if(data.success){
+        toast.success(data.message)
+        // Remove the deleted creation from the state
+        setCreations(creations.filter(creation => creation.id !== id))
+      }else{
+        toast.error(data.message)
+      }
+    } catch (error) {
+      toast.error(error.message)
+    }
+  }
+
   useEffect(()=>{
     getDashboardData()
   },[])
@@ -81,7 +100,7 @@ const Dashboard = () => {
           ) : (<div className='space-y-3'>
         <p className='mt-6 mb-4'>Recent Creations</p>
         {
-          creations.map((item)=> <CreationItem key={item.id} item={item}/>)
+          creations.map((item)=> <CreationItem key={item.id} item={item} onDelete={handleDeleteCreation}/>)
         }
       </div>)
         }

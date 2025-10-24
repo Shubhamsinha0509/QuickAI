@@ -5,7 +5,7 @@ import star_icon from "./star_icon.svg";
 import star_dull_icon from "./star_dull_icon.svg";
 import profile_img_1 from "./profile_img_1.png";
 import arrow_icon from "./arrow_icon.svg";
-import { SquarePen, Hash, Image, Eraser, Scissors, FileText } from 'lucide-react'
+import { SquarePen, Hash, Image, Eraser, Scissors } from 'lucide-react'
 import ai_gen_img_1 from "./ai_gen_img_1.png";
 import ai_gen_img_2 from "./ai_gen_img_2.png";
 import ai_gen_img_3 from "./ai_gen_img_3.png";
@@ -55,13 +55,6 @@ export const AiToolsData = [
         Icon: Scissors,
         bg: { from: '#5C6AF1', to: '#427DF5' },
         path: '/ai/remove-object'
-    },
-    {
-        title: 'Resume Reviewer',
-        description: 'Get your resume reviewed by AI to improve your chances of landing your dream job.',
-        Icon: FileText,
-        bg: { from: '#12B7AC', to: '#08B6CE' },
-        path: '/ai/review-resume'
     }
 ]
 
