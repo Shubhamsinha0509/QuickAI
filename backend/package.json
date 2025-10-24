@@ -14,7 +14,6 @@
   "description": "",
   "dependencies": {
     "@clerk/express": "^1.7.41",
-    "@napi-rs/canvas": "^0.1.80",
     "@neondatabase/serverless": "^1.0.2",
     "axios": "^1.12.2",
     "cloudinary": "^2.8.0",
@@ -22,10 +21,7 @@
     "dotenv": "^17.2.3",
     "express": "^5.1.0",
     "multer": "^2.0.2",
-    "openai": "^6.6.0",
-    "pdf-lib": "^1.17.1",
-    "pdf-parse": "^2.4.5",
-    "pdfjs-dist": "^5.4.296"
+    "openai": "^6.6.0"
   },
   "devDependencies": {
     "nodemon": "^3.1.10"
