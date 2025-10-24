@@ -1,7 +1,7 @@
 import { Hash, Sparkles } from 'lucide-react';
 import React, { useState } from 'react'
 import toast from 'react-hot-toast';
-import { Markdown } from '@react-email/components';
+import ReactMarkdown from 'react-markdown';
 import { useAuth } from '@clerk/clerk-react';
 import axios from 'axios';
 
@@ -98,7 +98,7 @@ const BlogTitles = () => {
            <div className="mt-3 h-full overflow-y-scroll text-sm text-slate-600">
                       <div className=".reset-tw">
           
-                        <Markdown>{content}</Markdown>
+                        <ReactMarkdown>{content}</ReactMarkdown>
                         
                       </div>
                     </div>

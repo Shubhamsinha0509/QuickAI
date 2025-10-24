@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Markdown } from '@react-email/components'
+import ReactMarkdown from 'react-markdown'
 import { Trash2 } from 'lucide-react'
 
 const CreationItem = ({item, onDelete}) => {
@@ -46,7 +46,7 @@ const CreationItem = ({item, onDelete}) => {
                         <div className='mt-3 h-full overflow-y-scroll text-sm 
                         text-slate-700'>
                             <div className='reset-tw'>
-                                <Markdown>{item.content}</Markdown>
+                                <ReactMarkdown>{item.content}</ReactMarkdown>
                                 
                             </div>
 
