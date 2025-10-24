@@ -158,7 +158,10 @@ export const removeImageBackground = async (req,res) => {
             return res.json({ success:false, message : 'This feature is only available for premium subscriptions.'})
         }
 
-        const {secure_url} =await cloudinary.uploader.upload(image.path, {
+        // Convert buffer to base64 for Cloudinary upload (memory storage compatibility)
+        const base64Image = `data:${image.mimetype};base64,${image.buffer.toString('base64')}`;
+        
+        const {secure_url} = await cloudinary.uploader.upload(base64Image, {
             transformation : [ 
                 {
                     effect : 'background_removal',
@@ -194,7 +197,10 @@ export const removeImageObject = async (req,res) => {
             return res.json({ success:false, message : 'This feature is only available for premium subscriptions.'})
         }
 
-        const {public_id} =await cloudinary.uploader.upload(image.path)
+        // Convert buffer to base64 for Cloudinary upload (memory storage compatibility)
+        const base64Image = `data:${image.mimetype};base64,${image.buffer.toString('base64')}`;
+        
+        const {public_id} = await cloudinary.uploader.upload(base64Image)
 
         const imageUrl = cloudinary.url(public_id,{
             transformation : [{effect: `gen_remove:${object}`}],

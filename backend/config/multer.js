@@ -1,7 +1,6 @@
 import multer from "multer";
 
-const storage = multer.diskStorage({
-  destination: "uploads/",
-});
+// Use memory storage for Vercel compatibility (serverless has read-only file system)
+const storage = multer.memoryStorage();
 
 export const upload = multer({ storage });
