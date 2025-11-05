@@ -5,6 +5,7 @@ import { clerkMiddleware, requireAuth } from '@clerk/express'
 import aiRouter from './routes/aiRoutes.js'
 import connectCloudinary from './config/cloudinary.js'
 import userRouter from './routes/userRoutes.js'
+import feedbackRouter from './routes/feedbackRoutes.js'
 
 const app = express ()
 await connectCloudinary()
@@ -23,6 +24,7 @@ app.use(requireAuth())
 
 app.use('/api/ai',aiRouter)
 app.use('/api/user',userRouter)
+app.use('/api/feedback',feedbackRouter)
 
 
 app.listen(PORT,()=>{

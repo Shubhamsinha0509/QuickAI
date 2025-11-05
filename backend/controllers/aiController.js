@@ -17,7 +17,7 @@ export const generateArticle = async (req,res) => {
         const plan = req.plan
         const free_usage = req.free_usage
 
-        if(plan !== 'premium' && free_usage >= 20){
+        if(plan !== 'premium' && free_usage >= 10){
             return res.json({ success:false, message : 'Limit reached. Upgrade to continue.'})
         }
 
@@ -66,7 +66,7 @@ export const generateBlogTitle = async (req,res) => {
         const plan = req.plan
         const free_usage = req.free_usage
 
-        if(plan !== 'premium' && free_usage >= 20){
+        if(plan !== 'premium' && free_usage >= 10){
             return res.json({ success:false, message : 'Limit reached. Upgrade to continue.'})
         }
 
@@ -115,7 +115,7 @@ export const generateImage = async (req,res) => {
         const plan = req.plan
         
 
-        if(plan !== 'premium' && free_usage >= 20){
+        if(plan !== 'premium' && free_usage >= 10){
             return res.json({ success:false, message : 'This feature is only available for premium subscriptions.'})
         }
 
@@ -154,7 +154,7 @@ export const removeImageBackground = async (req,res) => {
         const plan = req.plan
         
 
-        if(plan !== 'premium' && free_usage >= 20){
+        if(plan !== 'premium' && free_usage >= 10){
             return res.json({ success:false, message : 'This feature is only available for premium subscriptions.'})
         }
 
@@ -193,7 +193,7 @@ export const removeImageObject = async (req,res) => {
         const plan = req.plan
         
 
-        if(plan !== 'premium' && free_usage >= 20){
+        if(plan !== 'premium' && free_usage >= 10){
             return res.json({ success:false, message : 'This feature is only available for premium subscriptions.'})
         }
 

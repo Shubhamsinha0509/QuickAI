@@ -2,6 +2,7 @@ import React from 'react'
 import { Protect, useClerk, useUser } from '@clerk/clerk-react'
 import { Eraser, Hash, House, Scissors, SquarePen, Image, Users, LogOut } from 'lucide-react'
 import { NavLink } from 'react-router-dom'
+import FeedbackForm from './FeedbackForm'
 
 const navItems = [
   { to: '/ai', label: 'Dashboard', Icon: House },
@@ -64,6 +65,11 @@ const SideBar = ({ sidebar, setSidebar }) => {
               )
             })}
           </div>
+        </div>
+
+        {/* Feedback Form */}
+        <div className="w-full">
+          <FeedbackForm />
         </div>
 
         {/* Profile & Logout */}

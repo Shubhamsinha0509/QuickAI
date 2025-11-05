@@ -1,4 +1,4 @@
-import { Scissors, Sparkles } from 'lucide-react';
+import { Scissors, Sparkles, Download } from 'lucide-react';
 import React, { useState } from 'react'
 import axios from 'axios';
 import { useAuth } from '@clerk/clerk-react';
@@ -43,6 +43,24 @@ const RemoveObject = () => {
 
           if(input){
             console.log('Uploaded file',input.name)
+          }
+        }
+
+        const downloadImage = async () => {
+          try {
+            const response = await fetch(content)
+            const blob = await response.blob()
+            const url = window.URL.createObjectURL(blob)
+            const link = document.createElement('a')
+            link.href = url
+            link.download = `object-removed-${Date.now()}.png`
+            document.body.appendChild(link)
+            link.click()
+            document.body.removeChild(link)
+            window.URL.revokeObjectURL(url)
+            toast.success('Image downloaded successfully!')
+          } catch (error) {
+            toast.error('Failed to download image')
           }
         }
 
@@ -105,7 +123,16 @@ const RemoveObject = () => {
           </div>
 
         </div>) :(
-          <img src={content} alt="image" className='mt-3 w-full h-full'/>
+          <div className='mt-3'>
+            <img src={content} alt="image" className='w-full rounded-lg'/>
+            <button 
+              onClick={downloadImage}
+              className='w-full flex justify-center items-center gap-2 bg-gradient-to-r from-[#417DF6] to-[#8E37EB] text-white px-4 py-2.5 mt-4 text-sm rounded-lg cursor-pointer hover:opacity-90 transition'
+            >
+              <Download className="w-4 h-4"/>
+              Download Image
+            </button>
+          </div>
         )
           }
 
