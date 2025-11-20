@@ -17,7 +17,7 @@ const AiTools = () => {
             </div>
             <div className='flex flex-wrap mt-10 justify-center'>
                 {AiToolsData.map((tool, index) => {
-                    const Icon = tool.Icon // Fix: assign to uppercase
+                    const Icon = tool.Icon 
                     return (
                         <div
                             key={index}

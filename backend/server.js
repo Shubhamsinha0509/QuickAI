@@ -12,7 +12,11 @@ await connectCloudinary()
 
 const PORT = process.env.PORT || 3000 
 
-app.use(cors())
+app.use(cors({
+    origin:'https://www.quick-ai.dev',
+    credentials:true
+}
+))
 app.use(express.json())
 app.use(clerkMiddleware())
 
