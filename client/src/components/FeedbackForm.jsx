@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { MessageSquare, Send, X } from 'lucide-react'
-import { useUser } from '@clerk/clerk-react'
+import { useUser, useAuth } from '@clerk/clerk-react'
 import axios from 'axios'
 import toast from 'react-hot-toast'
 
@@ -9,6 +9,7 @@ const FeedbackForm = () => {
   const [feedback, setFeedback] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const { user } = useUser()
+  const { getToken } = useAuth()
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -22,12 +23,13 @@ const FeedbackForm = () => {
 
     try {
       const response = await axios.post(
-        `${import.meta.env.VITE_BACKEND_URL}/api/feedback/send`,
+        `${import.meta.env.VITE_BASE_URL}/api/feedback/send`,
         {
           feedback: feedback.trim(),
           userEmail: user.primaryEmailAddress?.emailAddress,
           userName: user.fullName,
-        }
+        },
+        { headers: { Authorization: `Bearer ${await getToken()}` } }
       )
 
       if (response.data.success) {

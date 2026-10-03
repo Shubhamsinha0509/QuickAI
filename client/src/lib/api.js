@@ -1,9 +1,8 @@
 import axios from 'axios';
-import { useAuth } from '@clerk/clerk-react';
 
 // Create axios instance with default config
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL,
+  baseURL: import.meta.env.VITE_BASE_URL,
   withCredentials: true,
   timeout: 30000, // 30 seconds
   headers: {
@@ -15,14 +14,14 @@ const api = axios.create({
 // Request interceptor for API calls
 api.interceptors.request.use(
   async (config) => {
-    // Get Clerk session token if available
-    const { getToken } = useAuth?.() || {};
-    const token = getToken ? await getToken() : null;
-    
+    // Get Clerk session token via the global Clerk instance -
+    // this file runs outside React, so the useAuth() hook can't be used here.
+    const token = await window.Clerk?.session?.getToken?.();
+
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
-    
+
     return config;
   },
   (error) => {

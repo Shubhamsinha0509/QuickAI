@@ -22,7 +22,7 @@ export const generateArticle = async (req,res) => {
         }
 
         const response = await openai.chat.completions.create({
-    model: "gemini-2.0-flash",
+    model: "gemini-3.8-flash",
     messages: [
         {
             role: "user",
@@ -30,7 +30,10 @@ export const generateArticle = async (req,res) => {
         },
     ],
     temperature : 0.7,
-    max_tokens : length
+    // `length` is a word target; reasoning tokens also draw from max_tokens,
+    // so without this headroom the article comes back truncated mid-sentence.
+    reasoning_effort : 'low',
+    max_tokens : length * 3
 });
 
     const content = response.choices[0].message.content
@@ -71,7 +74,7 @@ export const generateBlogTitle = async (req,res) => {
         }
 
     const response = await openai.chat.completions.create({
-    model: "gemini-2.0-flash",
+    model: "gemini-3.8-flash",
     messages: [
         {
             role: "user",
@@ -79,7 +82,10 @@ export const generateBlogTitle = async (req,res) => {
         },
     ],
     temperature : 0.7,
-    max_tokens : 100
+    // Reasoning tokens draw from max_tokens; at 100 the whole budget went to
+    // thinking and the response came back empty.
+    reasoning_effort : 'low',
+    max_tokens : 500
 });
 
     const content = response.choices[0].message.content
@@ -113,7 +119,7 @@ export const generateImage = async (req,res) => {
         const { userId } = req.auth()
         const { prompt, publish } =  req.body
         const plan = req.plan
-        
+        const free_usage = req.free_usage
 
         if(plan !== 'premium' && free_usage >= 10){
             return res.json({ success:false, message : 'This feature is only available for premium subscriptions.'})
@@ -133,8 +139,16 @@ export const generateImage = async (req,res) => {
 
 
 
-    await sql ` INSERT INTO creations (user_id, prompt, content, type, publish) 
+    await sql ` INSERT INTO creations (user_id, prompt, content, type, publish)
     VALUES (${userId},${prompt},${secure_url}, 'image', ${publish ?? false})`;
+
+    if(plan !== 'premium'){
+        await clerkClient.users.updateUserMetadata(userId,{
+            privateMetadata: {
+                free_usage : free_usage + 1
+            }
+        })
+    }
 
     res.json({success:true, content:secure_url})
 
@@ -152,7 +166,7 @@ export const removeImageBackground = async (req,res) => {
         const { userId } = req.auth()
         const  image  = req.file
         const plan = req.plan
-        
+        const free_usage = req.free_usage
 
         if(plan !== 'premium' && free_usage >= 10){
             return res.json({ success:false, message : 'This feature is only available for premium subscriptions.'})
@@ -160,9 +174,9 @@ export const removeImageBackground = async (req,res) => {
 
         // Convert buffer to base64 for Cloudinary upload (memory storage compatibility)
         const base64Image = `data:${image.mimetype};base64,${image.buffer.toString('base64')}`;
-        
+
         const {secure_url} = await cloudinary.uploader.upload(base64Image, {
-            transformation : [ 
+            transformation : [
                 {
                     effect : 'background_removal',
                     background_removal : 'remove_the_background'
@@ -170,8 +184,16 @@ export const removeImageBackground = async (req,res) => {
             ]
         })
 
-    await sql ` INSERT INTO creations (user_id, prompt, content, type ) 
+    await sql ` INSERT INTO creations (user_id, prompt, content, type )
     VALUES (${userId},'Remove background from image',${secure_url}, 'image' )`;
+
+    if(plan !== 'premium'){
+        await clerkClient.users.updateUserMetadata(userId,{
+            privateMetadata: {
+                free_usage : free_usage + 1
+            }
+        })
+    }
 
     res.json({success:true, content:secure_url})
 
@@ -191,7 +213,7 @@ export const removeImageObject = async (req,res) => {
         const { object } =req.body
         const  image  = req.file
         const plan = req.plan
-        
+        const free_usage = req.free_usage
 
         if(plan !== 'premium' && free_usage >= 10){
             return res.json({ success:false, message : 'This feature is only available for premium subscriptions.'})
@@ -207,8 +229,16 @@ export const removeImageObject = async (req,res) => {
             resource_type : 'image',
         })
 
-    await sql ` INSERT INTO creations (user_id, prompt, content, type ) 
+    await sql ` INSERT INTO creations (user_id, prompt, content, type )
     VALUES (${userId},${`Remove ${object} from image`},${imageUrl}, 'image' )`;
+
+    if(plan !== 'premium'){
+        await clerkClient.users.updateUserMetadata(userId,{
+            privateMetadata: {
+                free_usage : free_usage + 1
+            }
+        })
+    }
 
     res.json({success:true, content:imageUrl})
 

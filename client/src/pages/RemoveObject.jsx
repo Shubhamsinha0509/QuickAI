@@ -20,10 +20,12 @@ const RemoveObject = () => {
           try {
             setLoading(true)
             if(object.split(' ').length > 1){
-              return toast('please enter only one object name')
+              toast('please enter only one object name')
+              setLoading(false)
+              return
             }
 
-          const formData = new FormData() 
+          const formData = new FormData()
           formData.append('image',input)
           formData.append('object',object)
 

@@ -4,7 +4,7 @@ import sql from '../config/db.js'
 const sendFeedback = async (req, res) => {
   try {
     const { feedback, userEmail, userName } = req.body
-    const userId = req.auth.userId // Get userId from Clerk middleware
+    const { userId } = req.auth() // Get userId from Clerk middleware
 
     if (!feedback) {
       return res.status(400).json({ success: false, message: 'Feedback is required' })
@@ -23,11 +23,14 @@ const sendFeedback = async (req, res) => {
   }
 }
 
-// Get all feedbacks (optional - for admin view)
+// Get feedbacks submitted by the requesting user
 const getAllFeedbacks = async (req, res) => {
   try {
+    const { userId } = req.auth()
+
     const feedbacks = await sql`
-      SELECT * FROM feedbacks 
+      SELECT * FROM feedbacks
+      WHERE user_id = ${userId}
       ORDER BY created_at DESC
     `
 
